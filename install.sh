@@ -61,17 +61,47 @@ case "$OS" in
 esac
 print_info "Detected OS: $OS_TYPE"
 
-# Check Python version
+# Detect Python command (Windows uses 'python' or 'py', Linux uses 'python3')
 print_step "Checking Python version"
-if ! command -v python3 &> /dev/null; then
-    print_error "Python3 is not installed. Please install Python $PYTHON_VERSION or higher."
+PYTHON_CMD=""
+
+if [ "$OS_TYPE" = "Windows" ]; then
+    # On Windows, try python, py, then python3
+    if command -v python &> /dev/null; then
+        PYTHON_CMD="python"
+    elif command -v py &> /dev/null; then
+        PYTHON_CMD="py"
+    elif command -v python3 &> /dev/null; then
+        PYTHON_CMD="python3"
+    fi
+else
+    # On Linux/Mac, try python3 first, then python
+    if command -v python3 &> /dev/null; then
+        PYTHON_CMD="python3"
+    elif command -v python &> /dev/null; then
+        PYTHON_CMD="python"
+    fi
 fi
 
-PYTHON_VER=$(python3 --version 2>&1 | awk '{print $2}')
+if [ -z "$PYTHON_CMD" ]; then
+    print_error "Python is not installed or not in PATH. Please install Python $PYTHON_VERSION or higher."
+    print_info "On Windows, you can download from: https://www.python.org/downloads/"
+    print_info "Make sure to check 'Add Python to PATH' during installation."
+    exit 1
+fi
+
+print_info "Using Python command: $PYTHON_CMD"
+
+PYTHON_VER=$($PYTHON_CMD --version 2>&1 | awk '{print $2}')
 PYTHON_MAJOR=$(echo $PYTHON_VER | cut -d. -f1)
 PYTHON_MINOR=$(echo $PYTHON_VER | cut -d. -f2)
 
 print_info "Found Python version: $PYTHON_VER"
+
+if [ -z "$PYTHON_MAJOR" ] || [ -z "$PYTHON_MINOR" ]; then
+    print_error "Could not parse Python version. Got: $PYTHON_VER"
+    exit 1
+fi
 
 if [ "$PYTHON_MAJOR" -lt 3 ] || ([ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 11 ]); then
     print_error "Python $PYTHON_VERSION or higher is required. Found: $PYTHON_VER"
@@ -105,13 +135,13 @@ if [ -d "$VENV_NAME" ]; then
     if [ "$recreate_venv" = "y" ]; then
         print_info "Removing existing virtual environment..."
         rm -rf "$VENV_NAME"
-        python3 -m venv "$VENV_NAME"
+        $PYTHON_CMD -m venv "$VENV_NAME"
         print_success "Virtual environment recreated"
     else
         print_info "Using existing virtual environment"
     fi
 else
-    python3 -m venv "$VENV_NAME"
+    $PYTHON_CMD -m venv "$VENV_NAME"
     print_success "Virtual environment created"
 fi
 
@@ -185,7 +215,7 @@ fi
 # List audio devices
 print_step "Detecting audio devices"
 print_info "Running audio device detection..."
-python3 utils/listAudioDevices.py || print_warning "Could not list audio devices automatically"
+python utils/listAudioDevices.py || print_warning "Could not list audio devices automatically"
 
 echo ""
 print_info "Please note the device numbers for your microphone and speakers."
