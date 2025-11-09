@@ -113,7 +113,7 @@ if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -ge 13 ]; then
     print_warning "Recommended: Use Python 3.11 or 3.12 for best compatibility."
     echo ""
     echo "Options:"
-    echo "  1. Continue with latest PyTorch (may have compatibility issues)"
+    echo "  1. Continue with latest PyTorch 2.5.1 + CUDA 12.1 (may have compatibility issues)"
     echo "  2. Cancel and reinstall Python 3.11 or 3.12 (recommended)"
     echo ""
     echo -n "Enter choice (1 or 2): "
@@ -123,15 +123,17 @@ if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -ge 13 ]; then
         print_info "Download from: https://www.python.org/downloads/"
         exit 0
     fi
-    # Use latest PyTorch for newer Python
+    # Use latest PyTorch with CUDA 12.1 for newer Python
     PYTORCH_VERSION="2.5.1"
     PYTORCH_VISION="0.20.1"
     PYTORCH_AUDIO="2.5.1"
-    print_info "Will use PyTorch $PYTORCH_VERSION (latest stable)"
+    CUDA_VERSION="cu121"  # PyTorch 2.5.1 uses CUDA 12.1, not 11.8
+    print_info "Will use PyTorch $PYTORCH_VERSION with CUDA 12.1"
 else
     # Use tested versions for Python 3.11-3.12
     PYTORCH_VISION="0.17.2"
     PYTORCH_AUDIO="2.2.2"
+    print_info "Will use PyTorch $PYTORCH_VERSION with CUDA 11.8"
 fi
 
 print_success "Python version check passed"
