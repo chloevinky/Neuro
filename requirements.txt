@@ -8,7 +8,7 @@ realtimetts[coqui]==0.4.1
 # Communication and APIs
 python-socketio>=5.11.2
 sseclient-py>=1.8.0
-twitchAPI>=4.7.0
+twitchAPI>=4.2.0
 pyvts>=0.3.2
 mss>=9.0.1
 
