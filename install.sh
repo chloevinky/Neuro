@@ -156,7 +156,7 @@ print_success "Virtual environment activated"
 
 # Upgrade pip
 print_step "Upgrading pip"
-pip install --upgrade pip
+python -m pip install --upgrade pip
 print_success "Pip upgraded"
 
 # Install PyTorch with CUDA support
