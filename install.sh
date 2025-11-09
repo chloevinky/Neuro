@@ -15,8 +15,8 @@ NC='\033[0m' # No Color
 # Configuration
 PYTHON_VERSION="3.11"
 VENV_NAME="venv"
-PYTORCH_VERSION="2.2.2"
-CUDA_VERSION="cu118"
+PYTORCH_VERSION="2.4.1"  # Updated to recent stable version
+CUDA_VERSION="cu121"     # Updated to CUDA 12.1 for better performance
 
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${BLUE}║         Neuro AI VTuber - Installation Script             ║${NC}"
@@ -108,32 +108,24 @@ if [ "$PYTHON_MAJOR" -lt 3 ] || ([ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" 
 fi
 
 # Check if Python is too new for stable PyTorch
-if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -ge 13 ]; then
-    print_warning "Python $PYTHON_VER detected. PyTorch 2.2.2 doesn't support Python 3.13+."
-    print_warning "Recommended: Use Python 3.11 or 3.12 for best compatibility."
-    echo ""
-    echo "Options:"
-    echo "  1. Continue with latest PyTorch 2.5.1 + CUDA 12.1 (may have compatibility issues)"
-    echo "  2. Cancel and reinstall Python 3.11 or 3.12 (recommended)"
-    echo ""
-    echo -n "Enter choice (1 or 2): "
-    read -r python_choice
-    if [ "$python_choice" = "2" ]; then
-        print_info "Installation cancelled. Please install Python 3.11 or 3.12."
-        print_info "Download from: https://www.python.org/downloads/"
-        exit 0
-    fi
-    # Use latest PyTorch with CUDA 12.1 for newer Python
+if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -ge 14 ]; then
+    print_error "Python $PYTHON_VER detected. PyTorch does not yet have stable support for Python 3.14+."
+    print_error "Please install Python 3.11, 3.12, or 3.13."
+    print_info "Download Python 3.11.9 from: https://www.python.org/downloads/release/python-3119/"
+    exit 1
+elif [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -eq 13 ]; then
+    print_warning "Python $PYTHON_VER detected. Using latest PyTorch with experimental Python 3.13 support."
+    # Use latest PyTorch for Python 3.13
     PYTORCH_VERSION="2.5.1"
     PYTORCH_VISION="0.20.1"
     PYTORCH_AUDIO="2.5.1"
-    CUDA_VERSION="cu121"  # PyTorch 2.5.1 uses CUDA 12.1, not 11.8
+    CUDA_VERSION="cu121"
     print_info "Will use PyTorch $PYTORCH_VERSION with CUDA 12.1"
 else
-    # Use tested versions for Python 3.11-3.12
-    PYTORCH_VISION="0.17.2"
-    PYTORCH_AUDIO="2.2.2"
-    print_info "Will use PyTorch $PYTORCH_VERSION with CUDA 11.8"
+    # Use stable recent versions for Python 3.11-3.12
+    PYTORCH_VISION="0.19.1"
+    PYTORCH_AUDIO="2.4.1"
+    print_info "Will use PyTorch $PYTORCH_VERSION with CUDA 12.1"
 fi
 
 print_success "Python version check passed"

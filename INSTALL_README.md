@@ -38,15 +38,15 @@ nano .env
 - **CPU**: Modern multi-core processor (Ryzen 7 / Intel i7 or better)
 - **RAM**: 32GB DDR4/DDR5
 - **GPU**: NVIDIA GPU with 12GB+ VRAM (RTX 4070 or better)
-- **Python**: 3.11 or higher
-- **CUDA**: 11.8
+- **Python**: 3.11.9 (recommended) or 3.12
+- **CUDA**: 12.1 (automatically installed by installer)
 - **Storage**: 20GB+ free space
 
 ### Minimum Setup
 - **OS**: Linux or Windows
 - **RAM**: 16GB
 - **GPU**: NVIDIA GPU with 8GB+ VRAM
-- **Python**: 3.11
+- **Python**: 3.11 (do not use 3.14+, limited PyTorch support)
 - You can adjust model sizes and quality settings to run on less powerful hardware
 
 ---
@@ -343,7 +343,7 @@ nvidia-smi
 
 # Reinstall PyTorch with CUDA
 source venv/bin/activate
-pip install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cu118
+pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu121
 ```
 
 **Problem: Dependency conflicts**

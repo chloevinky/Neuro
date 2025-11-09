@@ -136,7 +136,7 @@ RAM: 32GB DDR5
 
 GPU: Nvidia GeForce RTX 4070 (12GB VRAM)
 
-Environment: Windows 11, Python 3.11.9, Pytorch 2.2.2, CUDA 11.8
+Environment: Windows 11, Python 3.11.9, PyTorch 2.4.1, CUDA 12.1
 
 ## Installation
 
@@ -161,12 +161,12 @@ documentation [here](https://pytwitchapi.dev/en/stable/index.html#user-authentic
 
 A virtual environment of some sort is recommended (Python 3.11 required); this project was developed with venv.
 
-First, install the CUDA 11.8 version of pytorch 2.2.2.
-`pip install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cu118`
+First, install the CUDA 12.1 version of PyTorch 2.4.1.
+`pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu121`
 
 Install requirements.txt.
 
-Use `pip list` to confirm that you still have the 2.2.2+cu118 version of torch and torchaudio still installed. If
+Use `pip list` to confirm that you still have the 2.4.1+cu121 version of torch and torchaudio still installed. If
 it got overridden, use the first command to install it again.
 
 DeepSpeed (For TTS) will need to be installed separately. I was using instructions
