@@ -7,6 +7,40 @@ DEMO VIDEO: [Youtube VOD](https://youtu.be/bywM1gyAEM4?si=706o2oialxbPEUBD&t=107
 
 ![Screenshot of demo stream](./images/stream.png)
 
+## 🚀 Quick Start - New Simplified Installation!
+
+**New:** This project now includes a one-click installer and easy control scripts!
+
+```bash
+# 1. Run the installer
+./install.sh
+
+# 2. Configure your settings (follow the prompts)
+nano constants.py
+nano .env
+
+# 3. Start the application
+./neuro start
+```
+
+**For detailed installation instructions, see [INSTALL_README.md](INSTALL_README.md)**
+
+The installer handles:
+- Virtual environment setup
+- PyTorch + CUDA installation
+- All dependencies
+- Configuration guidance
+- Audio device detection
+
+The `neuro` control script provides:
+- Easy start/stop/restart
+- Status checking
+- Log viewing
+- Process management
+
+**Continue reading below for architecture details and manual installation.**
+
+---
 
 ## Features
 - Realtime STT for natural voice input
@@ -153,6 +187,33 @@ Configure constants.py. Make sure to configure every value marked as UNIQUE, the
 be changed or confirmed.
 
 ## Running
+
+### Using the Control Script (Recommended)
+
+If you used the installer, you can easily start/stop the application:
+
+```bash
+# Start in foreground (see all output)
+./neuro start
+
+# Start in background (daemon mode)
+./neuro background
+
+# Check status
+./neuro status
+
+# View logs
+./neuro logs -f
+
+# Stop
+./neuro stop
+```
+
+For Windows users, use `neuro.bat` instead of `./neuro`.
+
+See [INSTALL_README.md](INSTALL_README.md) for detailed control script usage.
+
+### Manual Running
 
 Start text-generation-webui. Go to the Session tab and enable the openai extension (and follow instructions to actually
 apply the extension). Go to the Model tab and load the model.
