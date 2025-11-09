@@ -3,7 +3,9 @@
 
 # Core audio/speech processing
 realtimestt==0.3.7
-realtimetts[coqui]==0.4.1
+realtimetts==0.4.1
+# Note: coqui-tts requires C++ build tools on Windows
+# Install manually if needed: pip install coqui-tts==0.24.1
 
 # Communication and APIs
 python-socketio>=5.11.2
