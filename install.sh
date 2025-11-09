@@ -107,6 +107,33 @@ if [ "$PYTHON_MAJOR" -lt 3 ] || ([ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" 
     print_error "Python $PYTHON_VERSION or higher is required. Found: $PYTHON_VER"
 fi
 
+# Check if Python is too new for stable PyTorch
+if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -ge 13 ]; then
+    print_warning "Python $PYTHON_VER detected. PyTorch 2.2.2 doesn't support Python 3.13+."
+    print_warning "Recommended: Use Python 3.11 or 3.12 for best compatibility."
+    echo ""
+    echo "Options:"
+    echo "  1. Continue with latest PyTorch (may have compatibility issues)"
+    echo "  2. Cancel and reinstall Python 3.11 or 3.12 (recommended)"
+    echo ""
+    echo -n "Enter choice (1 or 2): "
+    read -r python_choice
+    if [ "$python_choice" = "2" ]; then
+        print_info "Installation cancelled. Please install Python 3.11 or 3.12."
+        print_info "Download from: https://www.python.org/downloads/"
+        exit 0
+    fi
+    # Use latest PyTorch for newer Python
+    PYTORCH_VERSION="2.5.1"
+    PYTORCH_VISION="0.20.1"
+    PYTORCH_AUDIO="2.5.1"
+    print_info "Will use PyTorch $PYTORCH_VERSION (latest stable)"
+else
+    # Use tested versions for Python 3.11-3.12
+    PYTORCH_VISION="0.17.2"
+    PYTORCH_AUDIO="2.2.2"
+fi
+
 print_success "Python version check passed"
 
 # Check for NVIDIA GPU (optional but recommended)
@@ -162,7 +189,7 @@ print_success "Pip upgraded"
 # Install PyTorch with CUDA support
 print_step "Installing PyTorch ${PYTORCH_VERSION} with CUDA ${CUDA_VERSION}"
 print_info "This may take several minutes depending on your internet connection..."
-pip install torch==${PYTORCH_VERSION} torchvision==0.17.2 torchaudio==${PYTORCH_VERSION} --index-url https://download.pytorch.org/whl/${CUDA_VERSION}
+pip install torch==${PYTORCH_VERSION} torchvision==${PYTORCH_VISION} torchaudio==${PYTORCH_AUDIO} --index-url https://download.pytorch.org/whl/${CUDA_VERSION}
 print_success "PyTorch installed"
 
 # Install requirements
@@ -179,7 +206,7 @@ if [[ "$TORCH_VER" == *"${PYTORCH_VERSION}"* ]] && [[ "$TORCH_VER" == *"${CUDA_V
 else
     print_warning "PyTorch version mismatch detected: $TORCH_VER"
     print_info "Reinstalling correct PyTorch version..."
-    pip install torch==${PYTORCH_VERSION} torchvision==0.17.2 torchaudio==${PYTORCH_VERSION} --index-url https://download.pytorch.org/whl/${CUDA_VERSION}
+    pip install torch==${PYTORCH_VERSION} torchvision==${PYTORCH_VISION} torchaudio==${PYTORCH_AUDIO} --index-url https://download.pytorch.org/whl/${CUDA_VERSION}
 fi
 
 # DeepSpeed installation (optional, for TTS performance)
