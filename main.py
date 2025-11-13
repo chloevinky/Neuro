@@ -13,7 +13,6 @@ from llmWrappers.textLLMWrapper import TextLLMWrapper
 from llmWrappers.imageLLMWrapper import ImageLLMWrapper
 from stt import STT
 from tts import TTS
-from modules.twitchClient import TwitchClient
 from modules.audioPlayer import AudioPlayer
 from modules.vtubeStudio import VtubeStudio
 from modules.multimodal import MultiModal
@@ -59,8 +58,6 @@ async def main():
 
     # Create Discord bot
     # modules['discord'] = DiscordClient(signals, stt, enabled=False)
-    # Create Twitch bot
-    modules['twitch'] = TwitchClient(signals, enabled=False)
     # Create audio player
     modules['audio_player'] = AudioPlayer(signals, enabled=True)
     # Create Vtube Studio plugin

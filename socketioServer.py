@@ -96,16 +96,6 @@ class SocketIOServer:
                 self.modules["vtube_studio"].API.move_model(mode)
 
         @sio.event
-        async def disable_twitch(sid):
-            if "twitch" in self.modules:
-                self.modules["twitch"].API.set_twitch_status(False)
-
-        @sio.event
-        async def enable_twitch(sid):
-            if "twitch" in self.modules:
-                self.modules["twitch"].API.set_twitch_status(True)
-
-        @sio.event
         async def cancel_next_message(sid):
             self.llmWrapper.API.cancel_next()
 
@@ -193,12 +183,9 @@ class SocketIOServer:
             self.signals.AI_thinking = self.signals.AI_thinking
             self.signals.AI_speaking = self.signals.AI_speaking
             self.signals.human_speaking = self.signals.human_speaking
-            self.signals.recentTwitchMessages = self.signals.recentTwitchMessages
             await sio.emit("patience_update", {"crr_time": time.time() - self.signals.last_message_time, "total_time": PATIENCE})
             await sio.emit('get_blacklist', self.llmWrapper.API.get_blacklist())
 
-            if "twitch" in self.modules:
-                await sio.emit('twitch_status', self.modules["twitch"].API.get_twitch_status())
             if "audio_player" in self.modules:
                 await sio.emit('audio_list', self.modules["audio_player"].API.get_audio_list())
             if "vtube_studio" in self.modules:
